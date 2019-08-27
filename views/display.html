@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<style>
+    body {
+        background-color: lightblue;
+    }
+        table#tb01,th,td {
+            border: 1px solid black;
+        }
+    </style>
+<body>
+    <table id="tb01">
+        <tr>
+            <td>Name</td>
+            <td>Due Date</td>
+            <td>Description</td>
+        </tr>
+        <% for ( var i =0; i< mydata.length;i++){ %>
+            <tr>
+                <td> <%= mydata[i].taskname %></td>
+                <td> <%= mydata[i].taskdue %></td>
+                <td> <%= mydata[i].taskdesc %></td>
+            </tr>
+
+        <% }%>
+
+    </table>
+    <h1><a href="/">Home</a></h1>
+</body>
+</html>
