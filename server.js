@@ -9,7 +9,11 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use(express.static('img'));
+app.use(express.static('css'));
 var filePath = __dirname + "/views/";
+
+
+
 
 var db=[];
 
