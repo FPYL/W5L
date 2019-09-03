@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <table id="tb01">
+        <tr>
+            <td>ID</td>
+            <td>Task Name</td>
+            <td>Assign to</td>
+            <td>Due Date</td>
+            <td>Status</td>
+            <td>Description</td>
+        </tr>
+        <% for ( let i =0; i< todo.length;i++){ %>
+            <tr>
+                <td> <%= todo[i].taskid %></td>
+                <td> <%= todo[i].taskname %></td>
+                <td> <%= todo[i].assignto %></td>
+                <td> <%= todo[i].taskdue %></td>
+                <td> <%= todo[i].taskstatus %></td>
+                <td> <%= todo[i].taskdesc %></td>
+            </tr>
+
+        <% }%>
+
+    </table>
+    <h1><a href="/">Home</a></h1>
+</body>
+
+<form  action="/update" method="POST">
+    <div><label for="id">id</label>
+    <input type="text" name="id" id="id" placeholder="Enter id">
+</div>
+<div><label for="taskstatus">taskstatus</label>
+    <select name="taskstatus">
+        <option value="InProgress">InProgress</option>
+        <option value="Complete">Complete</option>
+      </select>
+</div>
+<div>
+    <input type="submit" value="UPDATE">
+</div>
+</form>
+
+</html>

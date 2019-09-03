@@ -1,24 +1,25 @@
 <!DOCTYPE html>
-<style>
-    body {
-        background-color: lightblue;
-    }
-        table#tb01,th,td {
-            border: 1px solid black;
-        }
-    </style>
+<head>
+    <link rel="stylesheet" href="styles.css" />
+</head>
 <body>
     <table id="tb01">
         <tr>
-            <td>Name</td>
+            <td>ID</td>
+            <td>Task Name</td>
+            <td>Assign to</td>
             <td>Due Date</td>
+            <td>Status</td>
             <td>Description</td>
         </tr>
-        <% for ( var i =0; i< mydata.length;i++){ %>
+        <% for ( let i =0; i< todo.length;i++){ %>
             <tr>
-                <td> <%= mydata[i].taskname %></td>
-                <td> <%= mydata[i].taskdue %></td>
-                <td> <%= mydata[i].taskdesc %></td>
+                <td> <%= todo[i].taskid %></td>
+                <td> <%= todo[i].taskname %></td>
+                <td> <%= todo[i].assignto %></td>
+                <td> <%= todo[i].taskdue %></td>
+                <td> <%= todo[i].taskstatus %></td>
+                <td> <%= todo[i].taskdesc %></td>
             </tr>
 
         <% }%>
@@ -26,4 +27,5 @@
     </table>
     <h1><a href="/">Home</a></h1>
 </body>
+
 </html>
