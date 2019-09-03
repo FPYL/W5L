@@ -104,7 +104,7 @@ app.post('/delete_by_id',function(req,res){
 })
 
 app.get('/deleteAll',function(req,res){
-    col.deleteMany({},function(err,result){
+    col.deleteMany({taskstatus:"Complete"},function(err,result){
         if(err){
             console.log("err: ",err);
         }else{
