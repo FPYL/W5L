@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <table id="tb01">
+        <tr>
+            <td>ID</td>
+            <td>First Name</td>
+            <td>Last Name</td>
+            <td>Level</td>
+            <td>State</td>
+            <td>Suburb</td>
+            <td>Street</td>
+            <td>Unit</td>
+        </tr>
+        <% for ( let i =0; i< data.length;i++){ %>
+            <tr>
+                <td> <%= data[i]._id %></td>
+                <td> <%= data[i].name.firstname %></td>
+                <td> <%= data[i].name.lastname %></td>
+                <td> <%= data[i].level %></td>
+                <td> <%= data[i].address.state %></td>
+                <td> <%= data[i].address.suburb %></td>
+                <td> <%= data[i].address.street %></td>
+                <td> <%= data[i].address.unit %></td>
+            </tr>
+
+        <% }%>
+
+    </table>
+    <h1><a href="/">Home</a></h1>
+</body>
+
+</html>

@@ -12,14 +12,14 @@
             <td>Status</td>
             <td>Description</td>
         </tr>
-        <% for ( let i =0; i< todo.length;i++){ %>
+        <% for ( let i =0; i< data.length;i++){ %>
             <tr>
-                <td> <%= todo[i].taskid %></td>
-                <td> <%= todo[i].taskname %></td>
-                <td> <%= todo[i].assignto %></td>
-                <td> <%= todo[i].taskdue %></td>
-                <td> <%= todo[i].taskstatus %></td>
-                <td> <%= todo[i].taskdesc %></td>
+                <td> <%= data[i]._id %></td>
+                <td> <%= data[i].taskname %></td>
+                <td> <%= data[i].developer %></td>
+                <td> <%= data[i].duedate %></td>
+                <td> <%= data[i].status %></td>
+                <td> <%= data[i].description %></td>
             </tr>
 
         <% }%>

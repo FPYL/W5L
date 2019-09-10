@@ -1,6 +1,20 @@
 let express = require('express');
 let bodyParser = require('body-parser');
 let mongodb = require('mongodb');
+//
+var mongoose = require('mongoose');
+mongoose.set('useNewUrlParser',true);
+mongoose.connect("mongodb://localhost:27017/week7",function(err){
+    if(err){
+        console.log(err);
+        throw err;
+    }else{
+        console.log("connected successfully");
+    }
+});
+let task = require("./models/task");
+let developer = require("./models/developer");
+//
 let mongoClient = mongodb.MongoClient;
 let url = 'mongodb://localhost:27017/'
 mongoClient.connect(url,{ useNewUrlParser: true, useUnifiedTopology: true },function(err,client){
@@ -28,89 +42,120 @@ app.get("/",function(req,res){
     let fileName = filePath +"index.html";
     res.sendFile(fileName);
 });
+
+app.get("/addDeveloper",function(req,res){
+    let fileName = filePath +"adddeveloper.html";
+    res.sendFile(fileName);
+});
+
 app.get("/newTask",function(req,res){
     let fileName=filePath+"addtask.html";
     res.sendFile(fileName);
 });
 
 app.get("/listTasks",function(req,res){
-    console.log("homepage req");
-    col.find({}).toArray(function(err,result){
+    task.find().populate('task').exec(function(err,data){
         if(err){
-            console.log('err: ',err);
+            console.log(err);
         }else{
-            res.render("display",{ todo: result});
+            console.log(data)
+            res.render("display",{data:data});
         }
     });
 });
 
+app.get("/listDeveloper",function(req,res){
+    developer.find().populate('developer').exec(function(err,data){
+        if(err){
+            console.log(err);
+        }else{
+            console.log(data)
+            res.render("displaydeveloper",{data:data});
+        }
+    });
+
+});
+
 app.post("/addnew",function(req,res){
     console.log(req.body);
-    let itemId = Math.round(Math.random()*1000);
-    req.body["taskid"] = itemId;
-    col.insertOne(req.body,function(err,result){
+    task.create({
+        taskname : req.body.taskname,
+        status : req.body.taskstatus,
+        description : req.body.taskdesc,
+        duedate : req.body.taskdue,
+        developer : new mongoose.Types.ObjectId(req.body.assignto)
+    })
+
+});
+
+app.post("/adddeveloper",function(req,res){
+    console.log(req.body);
+    let developername = {
+        firstname: req.body.developerfname,
+        lastname: req.body.developerlname
+    };
+    let developeraddress = {
+        state:req.body.developerstate,
+        suburb:req.body.developersuburb,
+        street:req.body.developerstreet,
+        unit:req.body.developerunit
+    }
+    developer.create({
+        name: developername,
+        level: req.body.developerlevel,
+        address: developeraddress
+    },function(err){
         if(err){
-            console.log('err:',err);
+            console.log(err);
         }else{
-            res.redirect("/listTasks");
+            console.log("giiiiiioood");
         }
     })
+
 });
 
 app.get("/updateTask",function(req,res){
-    col.find({}).toArray(function(err,result){
+    task.find().populate('task').exec(function(err,data){
         if(err){
-            console.log('err: ',err);
+            console.log(err);
         }else{
-            res.render("updatetask",{ todo: result});
+            console.log(data)
+            res.render("updatetask",{data:data});
         }
     });
 });
 
 app.post("/update",function(req,res){
-    let __id = req.body.id;
-    let id = new mongodb.ObjectId(__id);
-    let taskstatus = req.body.taskstatus;
-    col.updateMany({_id:id},{$set:{taskstatus:taskstatus}},(err,result)=>{
-        if(err){
-            console.log("err:",err);
-        }else{
-            res.redirect('/listTasks');
-        }
-    })
+    
+    task.updateOne({ '_id': new mongoose.Types.ObjectId(req.body.id) }, { $set: { 'status': req.body.taskstatus } }, function (err, doc) {
+        console.log(doc);
+    });
+
 })
 
 app.get("/deleteTask",function(req,res){
-    col.find({}).toArray(function(err,result){
+    task.find().populate('task').exec(function(err,data){
         if(err){
-            console.log('err: ',err);
+            console.log(err);
         }else{
-            res.render("deletetask",{ todo: result});
+            console.log(data)
+            res.render("deletetask",{data:data});
         }
     });
 });
 
 app.post('/delete_by_id',function(req,res){
-    let taskid = parseInt(req.body.id);
+    
+    task.deleteOne({ '_id': new mongoose.Types.ObjectId(req.body.id) }, function (err, doc) {
+        console.log(doc);
+    });
 
-    //let id = new mongodb.ObjectId(__id);
-    col.deleteOne({taskid:taskid},function(err,result){
-        if(err){
-            console.log("err: ",err);
-        }else{
-            res.redirect('/listTasks');
-        }
-    })
 })
 
 app.get('/deleteAll',function(req,res){
-    col.deleteMany({taskstatus:"Complete"},function(err,result){
-        if(err){
-            console.log("err: ",err);
-        }else{
-            res.redirect('/listTasks');
-        }
-    })
+    task.deleteMany({ 'status': 'Complete' }, function (err, doc) {
+        console.log(doc);
+    });
 })
 
 app.get("/listValue",function(req,res){
@@ -145,6 +190,15 @@ app.get('/findtasks/:min/:max',function(req,res){
             res.render("display",{ todo: result});
         }
     });
+});
+app.get('/:oldname/:newname',function(req,res){
+    let oname = req.params.oldname;
+    let nname = req.params.newname;
+    developer.updateOne({ 'name.firstname': oname }, { $set: { 'name.firstname': nname } }, function (err, doc) {
+        console.log(doc);
+    });
+    let fileName = filePath +"index.html";
+    res.sendFile(fileName);
 });
 
 app.listen(8080);
